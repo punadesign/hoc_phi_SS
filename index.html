@@ -268,7 +268,75 @@
             100% { transform: rotate(360deg); }
         }
 
-        @media (max-width: 768px) {
+        .admin-notice {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .notice-content h3 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .access-steps {
+            margin-top: 15px;
+        }
+
+        .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .step kbd {
+            background: #333;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin: 0 2px;
+        }
+
+        .step code {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .login-form {
+            margin-top: 20px;
+        }
             .container {
                 padding: 10px;
             }
@@ -296,12 +364,37 @@
         </div>
 
         <div class="nav-buttons">
-            <button class="nav-btn active" onclick="showPage('admin')">👨‍💼 Quản trị viên</button>
-            <button class="nav-btn" onclick="showPage('search')">👨‍👩‍👧‍👦 Phụ huynh</button>
+            <button class="nav-btn" id="adminBtn" onclick="showAdminLogin()" style="display: none;">👨‍💼 Quản trị viên</button>
+            <button class="nav-btn active" onclick="showPage('search')">👨‍👩‍👧‍👦 Phụ huynh</button>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div id="adminLoginModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2 style="color: #667eea; margin-bottom: 20px;">🔐 Đăng nhập Admin</h2>
+                <div class="login-form">
+                    <input type="password" id="adminPassword" class="search-box" placeholder="Nhập mật khẩu admin..." style="margin-bottom: 15px;">
+                    <button onclick="checkAdminPassword()" class="search-btn">🚪 Đăng nhập</button>
+                    <button onclick="closeAdminLogin()" class="search-btn" style="background: #666; margin-top: 10px;">❌ Hủy</button>
+                </div>
+                <div id="loginError" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Admin Access Notice -->
+        <div id="adminNotice" class="admin-notice">
+            <div class="notice-content">
+                <h3>🔒 Khu vực Admin</h3>
+                <p>Để truy cập trang quản trị, vui lòng:</p>
+                <div class="access-steps">
+                    <div class="step">1️⃣ Nhấn tổ hợp phím: <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>A</kbd></div>
+                    <div class="step">2️⃣ Hoặc gõ: <code>admin_357</code> và nhấn Enter</div>
+                </div>
+            </div>
         </div>
 
         <!-- Admin Page -->
-        <div id="admin" class="page active">
+        <div id="admin" class="page" style="display: none;">
             <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">📊 Trang Quản trị viên</h2>
             
             <div class="upload-area" id="uploadArea">
@@ -324,7 +417,7 @@
         </div>
 
         <!-- Search Page -->
-        <div id="search" class="page">
+        <div id="search" class="page active">
             <h2 style="text-align: center; color: #667eea; margin-bottom: 30px;">🔍 Tra cứu thông tin học sinh</h2>
             
             <div class="search-container">
@@ -343,19 +436,157 @@
     </div>
 
     <script>
-        let studentData = [];
+        // Sample data for testing - replace with real data after admin upload
+        let studentData = [
+            {
+                stt: 1,
+                hoTen: "Nguyễn Văn Nam",
+                lop: "12A1",
+                mon: "Toán",
+                id: "HS001",
+                cu: 50000,
+                thang: 375000,
+                baiTap: 30000,
+                giam: 0,
+                cong: 0,
+                daNop: 200000,
+                con: 255000,
+                thanhToan: "https://img.vietqr.io/image/MB-22999986-compact.jpg?amount=255000&addInfo=HS001&accountName=LE%20VAN%20NAM"
+            },
+            {
+                stt: 2,
+                hoTen: "Trần Thị Mai",
+                lop: "11B2",
+                mon: "Văn",
+                id: "HS002",
+                cu: 0,
+                thang: 350000,
+                baiTap: 25000,
+                giam: 10000,
+                cong: 0,
+                daNop: 300000,
+                con: 65000,
+                thanhToan: "https://img.vietqr.io/image/MB-22999986-compact.jpg?amount=65000&addInfo=HS002&accountName=LE%20VAN%20NAM"
+            },
+            {
+                stt: 3,
+                hoTen: "Lê Minh Tuấn",
+                lop: "10C3",
+                mon: "Anh",
+                id: "HS003",
+                cu: 100000,
+                thang: 400000,
+                baiTap: 35000,
+                giam: 0,
+                cong: 15000,
+                daNop: 450000,
+                con: 100000,
+                thanhToan: "https://img.vietqr.io/image/MB-22999986-compact.jpg?amount=100000&addInfo=HS003&accountName=LE%20VAN%20NAM"
+            }
+        ];
+        let isAdminLoggedIn = false;
+        const ADMIN_PASSWORD = 'admin_357'; // Mật khẩu admin
 
-        // Navigation
+        // Check for admin access on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Ứng dụng đã được khởi tạo thành công!');
+            
+            // Hide admin button initially
+            document.getElementById('adminBtn').style.display = 'none';
+        });
+
+        // Admin access methods
+        document.addEventListener('keydown', function(e) {
+            // Ctrl + Shift + A
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                e.preventDefault();
+                showAdminLogin();
+            }
+        });
+
+        // Secret text input detection
+        let secretInput = '';
+        document.addEventListener('keypress', function(e) {
+            secretInput += e.key;
+            if (secretInput.length > 10) {
+                secretInput = secretInput.slice(-10);
+            }
+            
+            if (secretInput.includes('admin_357')) {
+                secretInput = '';
+                showAdminLogin();
+            }
+        });
+
+        function showAdminLogin() {
+            document.getElementById('adminLoginModal').style.display = 'flex';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminLoginModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        function checkAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+            
+            if (password === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                closeAdminLogin();
+                
+                // Show admin button and switch to admin page
+                document.getElementById('adminBtn').style.display = 'inline-block';
+                showPage('admin');
+                
+                // Update nav button states
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('adminBtn').classList.add('active');
+                
+                // Hide admin notice
+                document.getElementById('adminNotice').style.display = 'none';
+                
+            } else {
+                errorDiv.innerHTML = '<div class="error">❌ Mật khẩu không đúng!</div>';
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        // Handle Enter key in password field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAdminPassword();
+                }
+            });
+        });
+
+        // Navigation (updated)
         function showPage(pageId) {
+            // Check admin access
+            if (pageId === 'admin' && !isAdminLoggedIn) {
+                showAdminLogin();
+                return;
+            }
+            
             document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
+                page.style.display = 'none';
             });
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            document.getElementById(pageId).classList.add('active');
-            event.target.classList.add('active');
+            document.getElementById(pageId).style.display = 'block';
+            
+            // Update active button
+            if (pageId === 'admin') {
+                document.getElementById('adminBtn').classList.add('active');
+            } else {
+                event.target.classList.add('active');
+            }
         }
 
         // File upload functionality
@@ -448,8 +679,16 @@
                 return;
             }
 
-            // Store data globally
+            // Store data globally AND in localStorage
             studentData = students;
+            try {
+                // Note: localStorage may not work in all environments
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem('studentData', JSON.stringify(students));
+                }
+            } catch (e) {
+                console.log('Cannot save to localStorage:', e);
+            }
 
             // Create JSON file
             const jsonString = JSON.stringify(students, null, 2);
@@ -461,11 +700,14 @@
             
             showResult('success', 
                 `✅ Xử lý thành công ${students.length} học sinh!<br>
-                File data.json đã được tạo.<br>
+                File data.json đã được tạo và dữ liệu đã được cập nhật.<br>
                 ${downloadLink}<br><br>
                 <strong>Thống kê:</strong><br>
                 • Tổng số học sinh: ${students.length}<br>
-                • Số lượng có QR thanh toán: ${students.filter(s => s.thanhToan).length}`
+                • Số lượng có QR thanh toán: ${students.filter(s => s.thanhToan).length}<br><br>
+                <div style="background: #e8f4fd; padding: 10px; border-radius: 8px; margin-top: 10px;">
+                    💡 <strong>Lưu ý:</strong> Dữ liệu mới đã được cập nhật, phụ huynh có thể tìm kiếm ngay!
+                </div>`
             );
         }
 
@@ -499,18 +741,59 @@
             }
 
             if (studentData.length === 0) {
-                resultDiv.innerHTML = '<div class="no-data">⚠️ Chưa có dữ liệu học sinh.<br>Vui lòng liên hệ quản trị viên để cập nhật dữ liệu.</div>';
+                resultDiv.innerHTML = `
+                    <div class="no-data">
+                        ⚠️ Chưa có dữ liệu học sinh.<br>
+                        <div style="margin-top: 15px; padding: 15px; background: #f0f8ff; border-radius: 10px; border-left: 4px solid #667eea;">
+                            💡 <strong>Ghi chú:</strong><br>
+                            • Quản trị viên chưa cập nhật dữ liệu mới<br>
+                            • Vui lòng liên hệ trường để được hỗ trợ<br>
+                            • Hoặc thử lại sau ít phút
+                        </div>
+                        <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                            🔍 <strong>Để test:</strong> Thử tìm "Nam", "Mai" hoặc "Tuấn"
+                        </div>
+                    </div>
+                `;
                 return;
             }
 
             // Search by name or ID
             const results = studentData.filter(student => 
                 student.hoTen.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                student.id.toString().includes(searchTerm)
+                student.id.toString().toLowerCase().includes(searchTerm.toLowerCase())
             );
 
             if (results.length === 0) {
-                resultDiv.innerHTML = '<div class="no-data">❌ Không tìm thấy học sinh nào.<br>Vui lòng kiểm tra lại tên hoặc ID.</div>';
+                // Show suggestion for similar names
+                const suggestions = studentData
+                    .filter(student => 
+                        student.hoTen.toLowerCase().includes(searchTerm.toLowerCase().charAt(0)) ||
+                        student.hoTen.split(' ').some(word => 
+                            word.toLowerCase().startsWith(searchTerm.toLowerCase().charAt(0))
+                        )
+                    )
+                    .slice(0, 3);
+
+                let suggestionHtml = '';
+                if (suggestions.length > 0) {
+                    suggestionHtml = `
+                        <div style="margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 10px; border-left: 4px solid #ffc107;">
+                            💡 <strong>Có thể bạn đang tìm:</strong><br>
+                            ${suggestions.map(s => `• ${s.hoTen} (ID: ${s.id})`).join('<br>')}
+                        </div>
+                    `;
+                }
+
+                resultDiv.innerHTML = `
+                    <div class="no-data">
+                        ❌ Không tìm thấy học sinh: "<strong>${searchTerm}</strong>"<br>
+                        <div style="margin-top: 10px; font-size: 14px; color: #666;">
+                            🔍 Gợi ý: Kiểm tra lại chính tả hoặc thử tìm bằng ID
+                        </div>
+                        ${suggestionHtml}
+                    </div>
+                `;
                 return;
             }
 
@@ -550,7 +833,7 @@
                                 <strong>✅ Đã nộp:</strong> ${formatCurrency(student.daNop)}
                             </div>
                             <div class="info-item">
-                                <strong>⏳ Còn lại:</strong> <span style="color: #d63031; font-weight: bold;">${formatCurrency(student.con)}</span>
+                                <strong>⏳ Còn lại:</strong> <span style="color: #d63031; font-weight: bold; font-size: 1.1em;">${formatCurrency(student.con)}</span>
                             </div>
                         </div>
 
@@ -560,16 +843,23 @@
                                 <img src="${student.thanhToan}" alt="QR Code Thanh toán" class="qr-image" 
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <div style="display: none; color: #d63031; padding: 20px;">
-                                    ⚠️ Không thể tải hình ảnh QR Code
+                                    ⚠️ Không thể tải hình ảnh QR Code<br>
+                                    <small>Vui lòng liên hệ trường để được hỗ trợ</small>
                                 </div>
                                 <p style="margin-top: 15px; color: #666; font-size: 14px;">
                                     📱 Quét mã QR để thanh toán số tiền: <strong style="color: #d63031;">${formatCurrency(student.con)}</strong>
                                 </p>
+                                <div style="margin-top: 10px; padding: 10px; background: #e8f4fd; border-radius: 8px; font-size: 12px; color: #666;">
+                                    💡 Mở app ngân hàng → Quét QR → Xác nhận thanh toán
+                                </div>
                             </div>
                         ` : `
                             <div class="qr-container">
                                 <h4 style="color: #666;">💳 QR Code Thanh toán</h4>
                                 <p style="color: #666;">Chưa có thông tin thanh toán</p>
+                                <div style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 8px; font-size: 12px;">
+                                    📞 Vui lòng liên hệ văn phòng trường để được hỗ trợ
+                                </div>
                             </div>
                         `}
                     </div>
@@ -589,9 +879,48 @@
             }).format(amount);
         }
 
-        // Initialize
+        // Initialize (updated)
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Ứng dụng đã được khởi tạo thành công!');
+            
+            // Hide admin button initially
+            document.getElementById('adminBtn').style.display = 'none';
+            
+            // Try to load data from localStorage if available
+            try {
+                if (typeof(Storage) !== "undefined") {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const parsedData = JSON.parse(savedData);
+                        if (parsedData && parsedData.length > 0) {
+                            studentData = parsedData;
+                            console.log('Đã tải dữ liệu từ localStorage:', studentData.length, 'học sinh');
+                        }
+                    }
+                }
+            } catch (e) {
+                console.log('Không thể tải dữ liệu từ localStorage:', e);
+            }
+            
+            // Handle Enter key in password field
+            document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkAdminPassword();
+                }
+            });
+            
+            // Add sample search suggestions
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('focus', function() {
+                if (studentData.length > 0 && !this.value) {
+                    const randomStudent = studentData[Math.floor(Math.random() * studentData.length)];
+                    this.placeholder = `Ví dụ: ${randomStudent.hoTen} hoặc ${randomStudent.id}`;
+                }
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.placeholder = 'Nhập tên học sinh hoặc ID để tìm kiếm...';
+            });
         });
     </script>
 </body>
