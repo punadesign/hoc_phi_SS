@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản lý dữ liệu học phí</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .upload-area {
+            border: 3px dashed #ddd;
+            border-radius: 10px;
+            padding: 60px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: #4CAF50;
+            background: #f8fff8;
+        }
+        
+        .upload-area.dragover {
+            border-color: #4CAF50;
+            background: #f0f8f0;
+            transform: scale(1.02);
+        }
+        
+        .upload-icon {
+            font-size: 4em;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .upload-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .upload-button:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        
+        .preview {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .preview h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .preview-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .preview-table th,
+        .preview-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .preview-table th {
+            background: #4CAF50;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .preview-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .download-section {
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+        
+        .download-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .download-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎓 Admin Panel</h1>
+            <p>Quản lý dữ liệu học phí - Upload file Excel</p>
+        </div>
+        
+        <div class="content">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">📊</div>
+                <div class="upload-text">
+                    Kéo thả file Excel vào đây hoặc click để chọn file
+                </div>
+                <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                    Chọn file Excel
+                </button>
+                <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            </div>
+            
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="status" id="status"></div>
+            
+            <div class="preview" id="preview">
+                <h3>Xem trước dữ liệu (5 dòng đầu):</h3>
+                <div style="overflow-x: auto;">
+                    <table class="preview-table" id="previewTable"></table>
+                </div>
+            </div>
+            
+            <div class="download-section" id="downloadSection">
+                <p style="margin-bottom: 20px; color: #666;">
+                    File data.json đã được tạo thành công!
+                </p>
+                <a href="#" class="download-button" id="downloadButton" download="data.json">
+                    📥 Tải xuống data.json
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let processedData = null;
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const status = document.getElementById('status');
+        const preview = document.getElementById('preview');
+        const previewTable = document.getElementById('previewTable');
+        const downloadSection = document.getElementById('downloadSection');
+        const downloadButton = document.getElementById('downloadButton');
+
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+        }
+
+        function showProgress(percent) {
+            progressBar.style.display = 'block';
+            progressFill.style.width = percent + '%';
+        }
+
+        function hideProgress() {
+            progressBar.style.display = 'none';
+        }
+
+        function handleFile(file) {
+            if (!file.name.match(/\.(xlsx|xls)$/)) {
+                showStatus('Vui lòng chọn file Excel (.xlsx hoặc .xls)', 'error');
+                return;
+            }
+
+            showProgress(10);
+            showStatus('Đang xử lý file...', 'success');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    showProgress(50);
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    showProgress(70);
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    showProgress(90);
+                    processData(jsonData);
+                    showProgress(100);
+                    
+                    setTimeout(() => {
+                        hideProgress();
+                        showStatus('Xử lý file thành công!', 'success');
+                    }, 500);
+                    
+                } catch (error) {
+                    hideProgress();
+                    showStatus('Lỗi khi xử lý file: ' + error.message, 'error');
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processData(rawData) {
+            if (rawData.length < 2) {
+                throw new Error('File không có dữ liệu hợp lệ');
+            }
+
+            const headers = rawData[0];
+            const students = [];
+
+            // Process each row (skip header)
+            for (let i = 1; i < rawData.length; i++) {
+                const row = rawData[i];
+                if (row.length > 0 && row[1]) { // Check if name exists
+                    const student = {
+                        stt: row[0] || '',
+                        hoVaTen: row[1] || '',
+                        lop: row[2] || '',
+                        mon: row[3] || '',
+                        id: row[4] || '',
+                        cu: row[5] || 0,
+                        thang: row[6] || 0,
+                        baiTap: row[7] || 0,
+                        giam: row[8] || 0,
+                        cong: row[9] || 0,
+                        daNop: row[10] || 0,
+                        con: row[11] || 0,
+                        thanhToan: row[12] || '',
+                        qrCode: row[12] || '' // Use the QR URL from THÀNH TOÁN column
+                    };
+                    students.push(student);
+                }
+            }
+
+            processedData = {
+                lastUpdated: new Date().toISOString(),
+                students: students
+            };
+
+            showPreview(students.slice(0, 5));
+            enableDownload();
+        }
+
+        function showPreview(students) {
+            let tableHTML = `
+                <tr>
+                    <th>STT</th>
+                    <th>Họ và tên</th>
+                    <th>Lớp</th>
+                    <th>Môn</th>
+                    <th>ID</th>
+                    <th>Còn</th>
+                    <th>QR Code</th>
+                </tr>
+            `;
+
+            students.forEach(student => {
+                tableHTML += `
+                    <tr>
+                        <td>${student.stt}</td>
+                        <td>${student.hoVaTen}</td>
+                        <td>${student.lop}</td>
+                        <td>${student.mon}</td>
+                        <td>${student.id}</td>
+                        <td>${student.con.toLocaleString()}</td>
+                        <td>${student.qrCode ? '✅' : '❌'}</td>
+                    </tr>
+                `;
+            });
+
+            previewTable.innerHTML = tableHTML;
+            preview.style.display = 'block';
+        }
+
+        function enableDownload() {
+            const jsonString = JSON.stringify(processedData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            downloadButton.href = url;
+            downloadSection.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
