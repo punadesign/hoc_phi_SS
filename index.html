@@ -477,7 +477,7 @@
         
 async function fetchStudentData() {
     try {
-        const res = await fetch("https://opensheet.vercel.app/1YZ87hFckxY8WLbMo88UrykGCJwSuXQfhsZeDRlgi0B0/DATAHOCSINH");
+        const res = await fetch("https://punadesign.github.io/hoc_phi_SS/data.json");
         const data = await res.json();
 
         studentsData = data.map(student => ({
