@@ -431,25 +431,51 @@
 
         async function loadData() {
             try {
+                console.log('Đang tải dữ liệu từ data.json...');
                 const response = await fetch('data.json');
+                console.log('Response status:', response.status);
+                
                 if (!response.ok) {
-                    throw new Error('Không thể tải dữ liệu');
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                
                 const data = await response.json();
-                studentsData = data.students;
+                console.log('Dữ liệu đã tải:', data);
+                
+                // Xử lý cả 2 trường hợp: array trực tiếp hoặc object có thuộc tính students
+                if (Array.isArray(data)) {
+                    studentsData = data;
+                } else if (data.students) {
+                    studentsData = data.students;
+                } else {
+                    studentsData = [];
+                }
+                
+                console.log('Số học sinh:', studentsData ? studentsData.length : 0);
                 
                 if (!studentsData || studentsData.length === 0) {
                     document.getElementById('noDataMessage').style.display = 'block';
+                    console.log('Không có dữ liệu học sinh');
+                } else {
+                    console.log('Dữ liệu đã sẵn sàng để tìm kiếm');
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
-                showError('Không thể tải dữ liệu. Vui lòng thử lại sau.');
+                
+                // Nếu lỗi CORS, hiển thị hướng dẫn
+                if (error.message.includes('CORS') || error.message.includes('fetch')) {
+                    showError('Lỗi CORS: Vui lòng chạy website qua HTTP server hoặc deploy lên GitHub Pages để tránh lỗi CORS khi đọc file JSON.');
+                } else {
+                    showError('Không thể tải dữ liệu. Lỗi: ' + error.message);
+                }
+                
                 document.getElementById('noDataMessage').style.display = 'block';
             }
         }
 
         function searchStudent() {
             const searchTerm = document.getElementById('searchInput').value.trim();
+            console.log('Tìm kiếm:', searchTerm);
             
             if (!searchTerm) {
                 showError('Vui lòng nhập tên hoặc ID học sinh');
@@ -457,13 +483,29 @@
             }
 
             if (!studentsData) {
-                showError('Dữ liệu chưa được tải. Vui lòng thử lại.');
+                showError('Dữ liệu chưa được tải. Vui lòng kiểm tra file data.json và thử lại.');
+                console.log('studentsData is null');
                 return;
             }
 
+            console.log('Có', studentsData.length, 'học sinh để tìm kiếm');
             showLoading(true);
             hideError();
             hideResult();
+
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                const student = findStudent(searchTerm);
+                console.log('Kết quả tìm kiếm:', student);
+                showLoading(false);
+                
+                if (student) {
+                    displayStudent(student);
+                } else {
+                    showError('Không tìm thấy học sinh với từ khóa "' + searchTerm + '". Vui lòng kiểm tra lại tên hoặc ID.');
+                }
+            }, 800);
+        }
 
             // Simulate loading delay for better UX
             setTimeout(() => {
@@ -481,37 +523,40 @@
         function findStudent(searchTerm) {
             const term = searchTerm.toLowerCase();
             return studentsData.find(student => 
-                student.hoVaTen.toLowerCase().includes(term) ||
-                student.id.toString().toLowerCase().includes(term)
+                (student.hoTen && student.hoTen.toLowerCase().includes(term)) ||
+                (student.hoVaTen && student.hoVaTen.toLowerCase().includes(term)) ||
+                (student.id && student.id.toString().toLowerCase().includes(term))
             );
         }
 
         function displayStudent(student) {
             // Set student avatar (first letter of name)
-            const firstLetter = student.hoVaTen.charAt(0).toUpperCase();
+            const studentName = student.hoTen || student.hoVaTen || 'N/A';
+            const firstLetter = studentName.charAt(0).toUpperCase();
             document.getElementById('studentAvatar').textContent = firstLetter;
             
             // Set basic info
-            document.getElementById('studentName').textContent = student.hoVaTen;
-            document.getElementById('studentClass').textContent = student.lop;
-            document.getElementById('studentSubject').textContent = student.mon;
-            document.getElementById('studentId').textContent = student.id;
+            document.getElementById('studentName').textContent = studentName;
+            document.getElementById('studentClass').textContent = student.lop || 'N/A';
+            document.getElementById('studentSubject').textContent = student.mon || 'N/A';
+            document.getElementById('studentId').textContent = student.id || 'N/A';
             
             // Set fee details with proper formatting
-            document.getElementById('oldFee').textContent = formatCurrency(student.cu);
-            document.getElementById('monthFee').textContent = formatCurrency(student.thang);
-            document.getElementById('homeworkFee').textContent = formatCurrency(student.baiTap);
-            document.getElementById('discount').textContent = formatCurrency(student.giam);
-            document.getElementById('totalFee').textContent = formatCurrency(student.cong);
-            document.getElementById('paidFee').textContent = formatCurrency(student.daNop);
-            document.getElementById('remainingFee').textContent = formatCurrency(student.con);
+            document.getElementById('oldFee').textContent = formatCurrency(student.cu || 0);
+            document.getElementById('monthFee').textContent = formatCurrency(student.thang || 0);
+            document.getElementById('homeworkFee').textContent = formatCurrency(student.baiTap || 0);
+            document.getElementById('discount').textContent = formatCurrency(student.giam || 0);
+            document.getElementById('totalFee').textContent = formatCurrency(student.cong || 0);
+            document.getElementById('paidFee').textContent = formatCurrency(student.daNop || 0);
+            document.getElementById('remainingFee').textContent = formatCurrency(student.con || 0);
             
             // Handle QR code
             const qrSection = document.getElementById('qrSection');
             const qrImage = document.getElementById('qrImage');
             
-            if (student.qrCode && student.qrCode.trim() && student.con > 0) {
-                qrImage.src = student.qrCode;
+            const qrUrl = student.thanhToan || student.qrCode;
+            if (qrUrl && qrUrl.trim() && (student.con || 0) > 0) {
+                qrImage.src = qrUrl;
                 qrImage.onerror = function() {
                     qrSection.style.display = 'none';
                 };
