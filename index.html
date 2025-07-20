@@ -429,7 +429,42 @@
             });
         });
 
-        async function loadData() {
+        
+function searchStudent() {
+    const searchTerm = document.getElementById('searchInput').value.trim();
+    console.log('Tìm kiếm:', searchTerm);
+    
+    if (!searchTerm) {
+        showError('Vui lòng nhập tên hoặc ID học sinh');
+        return;
+    }
+
+    if (!studentsData) {
+        showError('Dữ liệu chưa được tải. Vui lòng kiểm tra file data.json và thử lại.');
+        console.log('studentsData is null');
+        return;
+    }
+
+    console.log('Có', studentsData.length, 'học sinh để tìm kiếm');
+    showLoading(true);
+    hideError();
+    hideResult();
+
+    setTimeout(() => {
+        const student = findStudent(searchTerm);
+        console.log('Kết quả tìm kiếm:', student);
+        showLoading(false);
+        
+        if (student) {
+            displayStudent(student);
+        } else {
+            showError('Không tìm thấy học sinh với từ khóa "' + searchTerm + '". Vui lòng kiểm tra lại tên hoặc ID.');
+        }
+    }, 800);
+}
+
+
+async function loadData() {
             try {
                 console.log('Đang tải dữ liệu từ data.json...');
                 const response = await fetch('https://punadesign.github.io/hoc_phi_SS/data.json?' + new Date().getTime());
@@ -473,16 +508,7 @@
             }
         }
 
-        function searchStudent() {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            console.log('Tìm kiếm:', searchTerm);
-            
-            if (!searchTerm) {
-                showError('Vui lòng nhập tên hoặc ID học sinh');
-                return;
-            }
-
-            if (!studentsData) {
+        if (!studentsData) {
                 showError('Dữ liệu chưa được tải. Vui lòng kiểm tra file data.json và thử lại.');
                 console.log('studentsData is null');
                 return;
@@ -493,7 +519,19 @@
             hideError();
             hideResult();
 
-            }
+            // Simulate loading delay for better UX
+            setTimeout(() => {
+                const student = findStudent(searchTerm);
+                console.log('Kết quả tìm kiếm:', student);
+                showLoading(false);
+                
+                if (student) {
+                    displayStudent(student);
+                } else {
+                    showError('Không tìm thấy học sinh với từ khóa "' + searchTerm + '". Vui lòng kiểm tra lại tên hoặc ID.');
+                }
+            }, 800);
+        }
 
             // Simulate loading delay for better UX
             setTimeout(() => {
