@@ -432,7 +432,7 @@
         async function loadData() {
             try {
                 console.log('Đang tải dữ liệu từ data.json...');
-                const response = await fetch('data.json');
+                const response = await fetch('https://punadesign.github.io/hoc_phi_SS/data.json');
                 console.log('Response status:', response.status);
                 
                 if (!response.ok) {
