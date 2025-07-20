@@ -10,141 +10,119 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
-        
+
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
-            padding: 40px 30px;
             text-align: center;
-            position: relative;
+            padding: 40px 20px;
         }
-        
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="1" fill="white" opacity="0.1"/><circle cx="20" cy="80" r="1" fill="white" opacity="0.1"/><circle cx="80" cy="30" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-            opacity: 0.3;
-        }
-        
-        .header-content {
-            position: relative;
-            z-index: 1;
-        }
-        
+
         .header h1 {
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: bold;
         }
-        
+
         .header p {
-            opacity: 0.95;
-            font-size: 1.2em;
-            font-weight: 300;
+            font-size: 1.1em;
+            opacity: 0.9;
         }
-        
-        .content {
-            padding: 50px 40px;
-        }
-        
-        .search-section {
+
+        .data-notice {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #8b4513;
+            padding: 20px;
             text-align: center;
-            margin-bottom: 40px;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
         }
-        
+
+        .search-section {
+            padding: 40px;
+        }
+
         .search-container {
-            position: relative;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
         }
-        
+
+        .search-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
         .search-input {
             width: 100%;
-            padding: 18px 60px 18px 25px;
-            font-size: 1.1em;
-            border: 3px solid #e0e0e0;
-            border-radius: 50px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
+            padding: 20px 60px 20px 20px;
+            font-size: 18px;
+            border: 3px solid #e1e5e9;
+            border-radius: 15px;
             outline: none;
+            transition: all 0.3s ease;
         }
-        
+
         .search-input:focus {
-            border-color: #667eea;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-            transform: translateY(-2px);
+            border-color: #4facfe;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
         }
-        
+
         .search-button {
             position: absolute;
-            right: 8px;
+            right: 5px;
             top: 50%;
             transform: translateY(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             border: none;
             padding: 12px 20px;
-            border-radius: 50px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 16px;
             transition: all 0.3s ease;
         }
-        
+
         .search-button:hover {
             transform: translateY(-50%) scale(1.05);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
-        
-        .loading {
-            text-align: center;
-            margin: 30px 0;
-            display: none;
-        }
-        
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
+
         .result-section {
-            display: none;
-            animation: fadeInUp 0.5s ease-out;
+            padding: 0 40px 40px;
         }
-        
-        @keyframes fadeInUp {
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #f0f0f0;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -154,172 +132,160 @@
                 transform: translateY(0);
             }
         }
-        
-        .student-card {
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 1px solid #e9ecef;
-        }
-        
+
         .student-header {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 20px;
         }
-        
-        .student-avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            margin-right: 20px;
+
+        .student-info {
+            flex: 1;
+        }
+
+        .student-name {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 10px;
             font-weight: bold;
         }
-        
-        .student-info h3 {
-            font-size: 1.8em;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .student-info p {
-            color: #6c757d;
-            font-size: 1.1em;
-        }
-        
-        .fee-details {
+
+        .student-details {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 30px;
         }
-        
-        .fee-item {
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .detail-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .detail-value {
+            font-size: 1.1em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .payment-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .payment-title {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .qr-container {
             background: white;
             padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            border-left: 4px solid #667eea;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        
-        .fee-item h4 {
-            color: #495057;
-            margin-bottom: 8px;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .fee-item .amount {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .fee-item.highlight {
-            border-left-color: #e74c3c;
-            background: linear-gradient(145deg, #fff5f5 0%, #ffffff 100%);
-        }
-        
-        .fee-item.highlight .amount {
-            color: #e74c3c;
-        }
-        
-        .qr-section {
-            text-align: center;
-            margin-top: 30px;
-            padding: 30px;
-            background: linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%);
-            border-radius: 20px;
-            border: 2px dashed #dee2e6;
-        }
-        
-        .qr-section h3 {
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-size: 1.5em;
-        }
-        
-        .qr-code {
-            max-width: 250px;
-            width: 100%;
+
+        .qr-image {
+            max-width: 200px;
             height: auto;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+
+        .payment-amount {
+            margin-top: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-result-icon {
+            font-size: 4em;
             margin-bottom: 20px;
         }
-        
-        .qr-instruction {
-            color: #6c757d;
-            font-size: 1em;
-            line-height: 1.6;
-            max-width: 400px;
-            margin: 0 auto;
+
+        .no-result-text {
+            font-size: 1.2em;
+            margin-bottom: 10px;
         }
-        
+
         .error-message {
             background: #f8d7da;
             color: #721c24;
             padding: 20px;
-            border-radius: 15px;
-            border: 1px solid #f5c6cb;
-            text-align: center;
-            display: none;
+            border-radius: 10px;
             margin: 20px 0;
+            border: 1px solid #f5c6cb;
         }
-        
-        .no-data-message {
+
+        .loading {
             text-align: center;
             padding: 40px;
-            color: #6c757d;
-            display: none;
+            color: #666;
         }
-        
-        .no-data-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            opacity: 0.5;
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
         }
-        
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 15px;
-            }
-            
-            .header {
-                padding: 30px 20px;
-            }
-            
             .header h1 {
-                font-size: 2.2em;
+                font-size: 2em;
             }
             
-            .content {
-                padding: 30px 20px;
+            .student-details {
+                grid-template-columns: 1fr;
             }
             
             .student-header {
                 flex-direction: column;
-                text-align: center;
             }
             
-            .student-avatar {
-                margin-right: 0;
-                margin-bottom: 15px;
+            .search-input {
+                font-size: 16px;
+                padding: 15px 50px 15px 15px;
             }
             
-            .fee-details {
-                grid-template-columns: 1fr;
+            .search-section {
+                padding: 20px;
+            }
+            
+            .result-section {
+                padding: 0 20px 20px;
             }
         }
     </style>
@@ -327,106 +293,193 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-content">
-                <h1>🎓 Tra cứu học phí</h1>
-                <p>Nhập tên hoặc ID học sinh để tra cứu thông tin học phí</p>
-            </div>
+            <h1>🎓 Hệ thống tra cứu học phí</h1>
+            <p>Tra cứu thông tin học sinh và thanh toán học phí</p>
         </div>
-        
-        <div class="content">
-            <div class="search-section">
-                <div class="search-container">
-                    <input type="text" 
-                           class="search-input" 
-                           id="searchInput" 
-                           placeholder="Nhập tên học sinh hoặc ID..."
-                           autocomplete="off">
-                    <button class="search-button" onclick="searchStudent()">
-                        🔍 Tìm kiếm
-                    </button>
-                </div>
-            </div>
-            
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p style="margin-top: 15px; color: #6c757d;">Đang tìm kiếm...</p>
-            </div>
-            
-            <div class="error-message" id="errorMessage"></div>
-            
-            <div class="no-data-message" id="noDataMessage">
-                <div class="no-data-icon">📚</div>
-                <h3>Chưa có dữ liệu</h3>
-                <p>Vui lòng liên hệ với trường để cập nhật dữ liệu học phí.</p>
-            </div>
-            
-            <div class="result-section" id="resultSection">
-                <div class="student-card">
-                    <div class="student-header">
-                        <div class="student-avatar" id="studentAvatar"></div>
-                        <div class="student-info">
-                            <h3 id="studentName"></h3>
-                            <p><strong>Lớp:</strong> <span id="studentClass"></span> | <strong>Môn:</strong> <span id="studentSubject"></span></p>
-                            <p><strong>ID:</strong> <span id="studentId"></span></p>
-                        </div>
-                    </div>
-                    
-                    <div class="fee-details">
-                        <div class="fee-item">
-                            <h4>Học phí cũ</h4>
-                            <div class="amount" id="oldFee"></div>
-                        </div>
-                        <div class="fee-item">
-                            <h4>Học phí tháng</h4>
-                            <div class="amount" id="monthFee"></div>
-                        </div>
-                        <div class="fee-item">
-                            <h4>Tiền bài tập</h4>
-                            <div class="amount" id="homeworkFee"></div>
-                        </div>
-                        <div class="fee-item">
-                            <h4>Giảm trừ</h4>
-                            <div class="amount" id="discount"></div>
-                        </div>
-                        <div class="fee-item">
-                            <h4>Tổng cộng</h4>
-                            <div class="amount" id="totalFee"></div>
-                        </div>
-                        <div class="fee-item">
-                            <h4>Đã nộp</h4>
-                            <div class="amount" id="paidFee"></div>
-                        </div>
-                        <div class="fee-item highlight">
-                            <h4>Còn lại</h4>
-                            <div class="amount" id="remainingFee"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="qr-section" id="qrSection">
-                        <h3>💳 Thanh toán QR Code</h3>
-                        <img class="qr-code" id="qrImage" alt="QR Code thanh toán" />
-                        <div class="qr-instruction">
-                            Quét mã QR bằng ứng dụng ngân hàng để thanh toán học phí còn lại
-                        </div>
-                    </div>
+
+        <div class="data-notice">
+            📋 Dữ liệu đã được cập nhật. Vui lòng nhập thông tin để tra cứu.
+        </div>
+
+        <div class="search-section">
+            <div class="search-container">
+                <h2 class="search-title">🔍 Tra cứu thông tin</h2>
+                <div class="search-box">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Nhập ID hoặc họ tên học sinh..."
+                    />
+                    <button id="searchButton" class="search-button">Tìm</button>
                 </div>
             </div>
         </div>
+
+        <div class="result-section" id="resultSection"></div>
     </div>
 
     <script>
-        let studentsData = null;
-        
-        // Load data when page loads
-        
-let studentsData = [];
+        // Dữ liệu mẫu học sinh - Thay thế bằng dữ liệu thực từ admin
+        let studentsData = [];
 
+        // Xử lý tìm kiếm học sinh
+        function searchStudent() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultDiv = document.getElementById('resultSection');
+            
+            if (!searchTerm) {
+                resultDiv.innerHTML = `
+                    <div class="no-result">
+                        <div class="no-result-icon">🔍</div>
+                        <div class="no-result-text">Vui lòng nhập ID hoặc họ tên để tìm kiếm</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Hiển thị loading
+            resultDiv.innerHTML = '<div class="loading">Đang tìm kiếm...</div>';
+
+            // Giả lập thời gian tìm kiếm
+            setTimeout(() => {
+                const results = studentsData.filter(student => 
+                    student.id.toLowerCase().includes(searchTerm) || 
+                    student.hoTen.toLowerCase().includes(searchTerm)
+                );
+
+                if (results.length === 0) {
+                    resultDiv.innerHTML = `
+                        <div class="no-result">
+                            <div class="no-result-icon">😔</div>
+                            <div class="no-result-text">Không tìm thấy học sinh</div>
+                            <div>Vui lòng kiểm tra lại ID hoặc họ tên</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Hiển thị kết quả đầu tiên
+                displayStudent(results[0]);
+                
+                // Nếu có nhiều kết quả, hiển thị thông báo
+                if (results.length > 1) {
+                    const existingCard = resultDiv.querySelector('.student-card');
+                    const notice = document.createElement('div');
+                    notice.className = 'error-message';
+                    notice.style.background = '#d1ecf1';
+                    notice.style.color = '#0c5460';
+                    notice.style.border = '1px solid #bee5eb';
+                    notice.innerHTML = `📋 Tìm thấy ${results.length} kết quả. Hiển thị kết quả đầu tiên.`;
+                    resultDiv.insertBefore(notice, existingCard);
+                }
+            }, 800);
+        }
+
+        // Hiển thị thông tin chi tiết học sinh
+        function displayStudent(student) {
+            const resultDiv = document.getElementById('resultSection');
+            
+            // Xử lý QR Code
+            const qrImageHtml = student.thanhToan && student.con > 0 ? 
+                `<div class="qr-container">
+                    <img src="${student.thanhToan}" alt="QR Thanh toán" class="qr-image" 
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'"/>
+                    <div style="display: none; padding: 20px; color: #666;">
+                        QR Code không khả dụng<br>
+                        Vui lòng liên hệ để được hỗ trợ
+                    </div>
+                 </div>` :
+                '<div style="padding: 20px; color: #666;">Không cần thanh toán</div>';
+
+            // Tạo HTML card
+            resultDiv.innerHTML = `
+                <div class="student-card">
+                    <div class="student-header">
+                        <div class="student-info">
+                            <div class="student-name">👨‍🎓 ${student.hoTen}</div>
+                        </div>
+                    </div>
+
+                    <div class="student-details">
+                        <div class="detail-item">
+                            <div class="detail-label">ID học sinh</div>
+                            <div class="detail-value">${student.id}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Lớp</div>
+                            <div class="detail-value">${student.lop}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Môn học</div>
+                            <div class="detail-value">${student.mon}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tháng cũ</div>
+                            <div class="detail-value">${formatMoney(student.thangCu)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">HP tháng mới</div>
+                            <div class="detail-value">${formatMoney(student.hpThangMoi)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Sách bài tập</div>
+                            <div class="detail-value">${formatMoney(student.sachBaiTap)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Giảm</div>
+                            <div class="detail-value" style="color: #28a745;">${formatMoney(student.giam)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Tổng cộng</div>
+                            <div class="detail-value">${formatMoney(student.cong)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Đã nộp</div>
+                            <div class="detail-value" style="color: #28a745;">${formatMoney(student.daNop)} VNĐ</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Còn lại</div>
+                            <div class="detail-value" style="color: ${student.con > 0 ? '#e74c3c' : '#28a745'}; font-weight: bold; font-size: 1.3em;">
+                                ${formatMoney(student.con)} VNĐ
+                            </div>
+                        </div>
+                    </div>
+
+                    ${student.con > 0 ? `
+                        <div class="payment-section">
+                            <div class="payment-title">💳 Thanh toán học phí</div>
+                            ${qrImageHtml}
+                            <div class="payment-amount">Số tiền cần thanh toán: ${formatMoney(student.con)} VNĐ</div>
+                            <div style="margin-top: 15px; font-size: 0.9em; opacity: 0.9;">
+                                Quét mã QR để thanh toán hoặc chuyển khoản với nội dung: <strong>${student.id}</strong>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="payment-section" style="background: linear-gradient(135deg, #56cc9d 0%, #6cc0e5 100%);">
+                            <div class="payment-title">✅ Đã thanh toán đầy đủ</div>
+                            <div style="font-size: 1.1em; margin-top: 10px;">Cảm ơn quý phụ huynh đã thanh toán!</div>
+                            <div style="font-size: 0.9em; margin-top: 10px; opacity: 0.9;">
+                                Mọi thắc mắc xin liên hệ với nhà trường
+                            </div>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        // Format tiền tệ
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount);
+        }
+
+        // Event listeners
+        
 async function fetchStudentData() {
     try {
         const res = await fetch("https://opensheet.vercel.app/1YZ87hFckxY8WLbMo88UrykGCJwSuXQfhsZeDRlgi0B0/DATAHOCSINH");
         const data = await res.json();
 
-        // Ép kiểu số cho các trường liên quan
         studentsData = data.map(student => ({
             ...student,
             thangCu: +student.thangCu || 0,
@@ -448,177 +501,28 @@ async function fetchStudentData() {
 
 document.addEventListener('DOMContentLoaded', async function() {
     await fetchStudentData();
-            loadData();
+            const searchButton = document.getElementById('searchButton');
+            const searchInput = document.getElementById('searchInput');
             
-            // Add enter key support for search
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            searchButton.addEventListener('click', searchStudent);
+            searchInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchStudent();
                 }
             });
+
+            // Focus vào ô tìm kiếm
+            searchInput.focus();
+
+            // Hiển thị thông báo ban đầu
+            document.getElementById('resultSection').innerHTML = `
+                <div class="no-result">
+                    <div class="no-result-icon">🏫</div>
+                    <div class="no-result-text">Chào mừng đến với hệ thống tra cứu học phí</div>
+                    <div>Nhập ID hoặc họ tên học sinh để bắt đầu tra cứu</div>
+                </div>
+            `;
         });
-
-        async function loadData() {
-            try {
-                console.log('Đang tải dữ liệu từ data.json...');
-                const response = await fetch('data.json');
-                console.log('Response status:', response.status);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('Dữ liệu đã tải:', data);
-                
-                // Xử lý cả 2 trường hợp: array trực tiếp hoặc object có thuộc tính students
-                if (Array.isArray(data)) {
-                    studentsData = data;
-                } else if (data.students) {
-                    studentsData = data.students;
-                } else {
-                    studentsData = [];
-                }
-                
-                console.log('Số học sinh:', studentsData ? studentsData.length : 0);
-                
-                if (!studentsData || studentsData.length === 0) {
-                    document.getElementById('noDataMessage').style.display = 'block';
-                    console.log('Không có dữ liệu học sinh');
-                } else {
-                    console.log('Dữ liệu đã sẵn sàng để tìm kiếm');
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                
-                // Nếu lỗi CORS, hiển thị hướng dẫn
-                if (error.message.includes('CORS') || error.message.includes('fetch')) {
-                    showError('Lỗi CORS: Vui lòng chạy website qua HTTP server hoặc deploy lên GitHub Pages để tránh lỗi CORS khi đọc file JSON.');
-                } else {
-                    showError('Không thể tải dữ liệu. Lỗi: ' + error.message);
-                }
-                
-                document.getElementById('noDataMessage').style.display = 'block';
-            }
-        }
-
-        function searchStudent() {
-            const searchTerm = document.getElementById('searchInput').value.trim();
-            console.log('Tìm kiếm:', searchTerm);
-            
-            if (!searchTerm) {
-                showError('Vui lòng nhập tên hoặc ID học sinh');
-                return;
-            }
-
-            if (!studentsData) {
-                showError('Dữ liệu chưa được tải. Vui lòng kiểm tra file data.json và thử lại.');
-                console.log('studentsData is null');
-                return;
-            }
-
-            console.log('Có', studentsData.length, 'học sinh để tìm kiếm');
-            showLoading(true);
-            hideError();
-            hideResult();
-
-            // Simulate loading delay for better UX
-            setTimeout(() => {
-                const student = findStudent(searchTerm);
-                console.log('Kết quả tìm kiếm:', student);
-                showLoading(false);
-                
-                if (student) {
-                    displayStudent(student);
-                } else {
-                    showError('Không tìm thấy học sinh với từ khóa "' + searchTerm + '". Vui lòng kiểm tra lại tên hoặc ID.');
-                }
-            }, 800);
-        }
-
-            // Simulate loading delay for better UX
-            setTimeout(() => {
-                const student = findStudent(searchTerm);
-                showLoading(false);
-                
-                if (student) {
-                    displayStudent(student);
-                } else {
-                    showError('Không tìm thấy học sinh. Vui lòng kiểm tra lại tên hoặc ID.');
-                }
-            }, 800);
-        }
-
-        function findStudent(searchTerm) {
-            const term = searchTerm.toLowerCase();
-            return studentsData.find(student => 
-                (student.hoTen && student.hoTen.toLowerCase().includes(term)) ||
-                (student.hoVaTen && student.hoVaTen.toLowerCase().includes(term)) ||
-                (student.id && student.id.toString().toLowerCase().includes(term))
-            );
-        }
-
-        function displayStudent(student) {
-            // Set student avatar (first letter of name)
-            const studentName = student.hoTen || student.hoVaTen || 'N/A';
-            const firstLetter = studentName.charAt(0).toUpperCase();
-            document.getElementById('studentAvatar').textContent = firstLetter;
-            
-            // Set basic info
-            document.getElementById('studentName').textContent = studentName;
-            document.getElementById('studentClass').textContent = student.lop || 'N/A';
-            document.getElementById('studentSubject').textContent = student.mon || 'N/A';
-            document.getElementById('studentId').textContent = student.id || 'N/A';
-            
-            // Set fee details with proper formatting
-            document.getElementById('oldFee').textContent = formatCurrency(student.cu || 0);
-            document.getElementById('monthFee').textContent = formatCurrency(student.thang || 0);
-            document.getElementById('homeworkFee').textContent = formatCurrency(student.baiTap || 0);
-            document.getElementById('discount').textContent = formatCurrency(student.giam || 0);
-            document.getElementById('totalFee').textContent = formatCurrency(student.cong || 0);
-            document.getElementById('paidFee').textContent = formatCurrency(student.daNop || 0);
-            document.getElementById('remainingFee').textContent = formatCurrency(student.con || 0);
-            
-            // Handle QR code
-            const qrSection = document.getElementById('qrSection');
-            const qrImage = document.getElementById('qrImage');
-            
-            const qrUrl = student.thanhToan || student.qrCode;
-            if (qrUrl && qrUrl.trim() && (student.con || 0) > 0) {
-                qrImage.src = qrUrl;
-                qrImage.onerror = function() {
-                    qrSection.style.display = 'none';
-                };
-                qrSection.style.display = 'block';
-            } else {
-                qrSection.style.display = 'none';
-            }
-            
-            document.getElementById('resultSection').style.display = 'block';
-        }
-
-        function formatCurrency(amount) {
-            if (!amount || amount === 0) return '0₫';
-            return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
-        }
-
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-        }
-
-        function showError(message) {
-            const errorElement = document.getElementById('errorMessage');
-            errorElement.textContent = message;
-            errorElement.style.display = 'block';
-        }
-
-        function hideError() {
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-
-        function hideResult() {
-            document.getElementById('resultSection').style.display = 'none';
-        }
     </script>
 </body>
 </html>
